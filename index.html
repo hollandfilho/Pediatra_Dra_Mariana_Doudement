@@ -4,8 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartão Corporativo</title>
-    <meta http-equiv="refresh" content="0;url=https://github.com/hollandfilho/Pediatra_Dra_Mariana_Doudement/raw/main/Cartão Interativo - Dra. Mariana Doudement.pdf">
+    <!-- Link para o PDF.js a partir de CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <style>
+        #pdf-canvas {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
+    <h1>Visualize o Cartão Corporativo:</h1>
+    <canvas id="pdf-canvas"></canvas>
+    
+    <script>
+        const url = 'https://github.com/hollandfilho/Pediatra_Dra_Mariana_Doudement/raw/main/Cartão Interativo - Dra. Mariana Doudement.pdf'; // Coloque o link correto para o seu PDF
+
+        // Carregar o PDF
+        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            // Exibir a primeira página do PDF
+            pdf.getPage(1).then(function(page) {
+                const scale = 1.5; // Tamanho de escalonamento da página
+                const viewport = page.getViewport({ scale: scale });
+                
+                // Preparar o canvas para exibir a página
+                const canvas = document.getElementById('pdf-canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Renderizar a página no canvas
+                page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                });
+            });
+        }).catch(function(error) {
+            console.error('Erro ao carregar o PDF:', error);
+        });
+    </script>
 </body>
 </html>
